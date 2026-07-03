@@ -8,14 +8,16 @@ export async function POST({ request, locals }) {
 	}
 
 	const { filename, contentType } = await request.json();
-	if (!filename || !contentType) {
-		return new Response('Missing filename or contentType', { status: 400 });
+	if (!filename) {
+		return new Response('Missing filename', { status: 400 });
 	}
+
+	const resolvedContentType = contentType || 'application/octet-stream';
 
 	const s3Key = `${locals.user.id}/${randomUUID()}-${filename}`;
 	
 	try {
-		const presignedUrl = await generateUploadUrl(s3Key, contentType);
+		const presignedUrl = await generateUploadUrl(s3Key, resolvedContentType);
 		console.log("Generated presigned URL:", presignedUrl);
 		return json({ presignedUrl, s3Key });
 	} catch (error) {

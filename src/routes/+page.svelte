@@ -34,12 +34,13 @@
 		isUploading = true;
 		
 		for (const file of filesToUpload) {
+			const fileType = file.type || 'application/octet-stream';
 			try {
 				// 1. Get presigned URL
 				const res = await fetch('/api/upload', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ filename: file.name, contentType: file.type })
+					body: JSON.stringify({ filename: file.name, contentType: fileType })
 				});
 				
 				if (!res.ok) throw new Error('Failed to get upload URL');
@@ -48,7 +49,7 @@
 				// 2. Upload to S3
 				const uploadRes = await fetch(presignedUrl, {
 					method: 'PUT',
-					headers: { 'Content-Type': file.type },
+					headers: { 'Content-Type': fileType },
 					body: file
 				});
 
@@ -60,7 +61,7 @@
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify({
 						name: file.name,
-						type: file.type,
+						type: fileType,
 						size: file.size,
 						s3Key
 					})
