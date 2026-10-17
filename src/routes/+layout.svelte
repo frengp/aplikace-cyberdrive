@@ -14,7 +14,7 @@
 		<div class="container mx-auto flex h-14 items-center justify-between px-4">
 			<div class="flex items-center gap-2 font-bold text-lg">
 				<Cloud class="h-6 w-6 text-primary" />
-				MTA drive
+				CyberDrive
 			</div>
 			
 			<div class="flex items-center gap-4">
